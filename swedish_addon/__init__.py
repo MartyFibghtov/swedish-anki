@@ -122,10 +122,10 @@ def print_all_notes(ed):
 
         webbrowser.open(url, 0, False)
 
-        url = "https://svenska.se/tre/?sok=$"
-        url = url.replace("$", search)
-        tooltip(url)
-        webbrowser.open(url, 0, False)
+        # url = "https://svenska.se/tre/?sok=$"
+        # url = url.replace("$", search)
+        # tooltip(url)
+        # webbrowser.open(url, 0, False)
 
         # Add Example
         if word.examples:
@@ -152,7 +152,7 @@ def add_button(buttons, editor):
                                    cmd="AD",
                                    func=lambda ed: ed.saveNow(lambda: print_all_notes(ed)),
                                    toggleable=False,
-                                   keys="cmd+a+s",
+                                   keys="cmd+shift+Y",
                                    disables=False)
 
     buttons.append(both_button)

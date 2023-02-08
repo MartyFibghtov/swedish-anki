@@ -65,23 +65,26 @@ class Word:
         return value
 
     def __init__(self, word_dict: Dict):
-        self.part_of_speech = word_dict['gr']
-        self.translation = list(set(self.to_list(word_dict.get('dtrn'))))
+        try:
+            self.part_of_speech = word_dict['gr']
+            self.translation = list(set(self.to_list(word_dict.get('dtrn'))))
 
-        word_urls = word_dict.get('iref')
+            word_urls = word_dict.get('iref')
 
-        audio_url = []
-        if word_urls:
-            audio_url = list(filter(lambda url: url.endswith(".mp3"), [url['@href'] for url in word_urls]))
+            audio_url = []
+            if word_urls:
+                audio_url = list(filter(lambda url: url.endswith(".mp3"), [url['@href'] for url in word_urls]))
 
-        self.audio_url = audio_url
-        self.definition = list(set(self.to_list(word_dict.get('def'))))
+            self.audio_url = audio_url
+            self.definition = list(set(self.to_list(word_dict.get('def'))))
 
-        examples = self.to_list(word_dict.get('ex'))
-        if examples:
-            examples = [ex['ex_orig'] for ex in examples]
+            examples = self.to_list(word_dict.get('ex'))
+            if examples:
+                examples = [ex['ex_orig'] for ex in examples if ex]
 
-        self.examples = examples
+            self.examples = examples
+        except Exception as e:
+            pass
 
 
 class Translator:
