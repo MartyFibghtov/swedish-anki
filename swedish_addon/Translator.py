@@ -8,6 +8,17 @@ from .utilities import xmltodict
 
 from .utilities.WordProcessors import WordProcessor
 
+# import os
+# from dataclasses import dataclass
+# from pprint import pprint
+# from typing import List, Dict
+# import xml.etree.ElementTree as ET
+#
+# from utilities import xmltodict
+#
+# from utilities.WordProcessors import WordProcessor
+
+
 
 class DictionaryXmlReader:
 
@@ -30,7 +41,10 @@ class DictionaryXmlReader:
         # Reset all keys to swedish words
 
         for translation in translations:
-            dictionary[translation['k']] = translation['def']
+            # TODO Choose from different options
+            # Or add all options
+            if translation['k'] not in dictionary:
+                dictionary[translation['k']] = translation['def']
 
         return dictionary
 
@@ -41,7 +55,8 @@ class Word:
     translation: List[str]
     audio_url: List[str]
     definition: List[str]
-    examples: List[Dict]
+    examples: List[str]
+    image_url: str = None
 
     @staticmethod
     def to_list(value):
@@ -51,7 +66,7 @@ class Word:
 
     def __init__(self, word_dict: Dict):
         self.part_of_speech = word_dict['gr']
-        self.translation = self.to_list(word_dict.get('dtrn'))
+        self.translation = list(set(self.to_list(word_dict.get('dtrn'))))
 
         word_urls = word_dict.get('iref')
 
@@ -60,9 +75,9 @@ class Word:
             audio_url = list(filter(lambda url: url.endswith(".mp3"), [url['@href'] for url in word_urls]))
 
         self.audio_url = audio_url
-        self.definition = self.to_list(word_dict.get('def'))
+        self.definition = list(set(self.to_list(word_dict.get('def'))))
 
-        examples = word_dict.get('ex')
+        examples = self.to_list(word_dict.get('ex'))
         if examples:
             examples = [ex['ex_orig'] for ex in examples]
 
