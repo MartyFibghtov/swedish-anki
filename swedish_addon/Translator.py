@@ -51,11 +51,11 @@ class DictionaryXmlReader:
 
 @dataclass
 class Word:
-    part_of_speech: str
-    translation: List[str]
-    audio_url: List[str]
-    definition: List[str]
-    examples: List[str]
+    part_of_speech: str = None
+    translation: List[str] = None
+    audio_url: List[str] = None
+    definition: List[str] = None
+    examples: List[str] = None
     image_url: str = None
 
     @staticmethod

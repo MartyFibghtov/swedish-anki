@@ -111,21 +111,21 @@ def print_all_notes(ed):
         # Add translation
         note_editor.add_text(", ".join(word.translation), field=1)
 
+        search = parse.quote(search)
+        url = "https://svenska.se/saol/?sok=$"
+        url = url.replace("$", search)
+        tooltip(url)
+        webbrowser.open(url, 0, False)
+
         # Add audio
         if word.audio_url:
             note_editor.add_audio(word.audio_url[0], field=2)
 
-        # TODO Add image
-        search = parse.quote(search)
+        search = parse.quote(word.translation[0])
         url = "https://www.google.com/search?q=$&tbm=isch&safe=off&tbs&hl=en&sa=X"
         url = url.replace("$", search)
 
         webbrowser.open(url, 0, False)
-
-        # url = "https://svenska.se/tre/?sok=$"
-        # url = url.replace("$", search)
-        # tooltip(url)
-        # webbrowser.open(url, 0, False)
 
         # Add Example
         if word.examples:
