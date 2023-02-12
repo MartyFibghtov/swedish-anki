@@ -41,10 +41,13 @@ class DictionaryXmlReader:
         # Reset all keys to swedish words
 
         for translation in translations:
+            word = "".join(translation['k'].split("|"))
             # TODO Choose from different options
             # Or add all options
-            if translation['k'] not in dictionary:
-                dictionary[translation['k']] = translation['def']
+            if word not in dictionary:
+                dictionary[word] = []
+
+            dictionary[word].append(translation['def'])
 
         return dictionary
 
@@ -94,18 +97,19 @@ class Translator:
         dict_reader = DictionaryXmlReader(self.DICTIONARY_PATH)
 
         self.dictionary: dict = dict_reader.get_dictionary()
-        # pprint(self.dictionary)
 
-    def translate(self, word: str) -> Word:
+    def translate(self, word: str) -> List[Word]:
+        translations = []
         word_normalised = WordProcessor.normalize_word(word)
-        try:
-            word_translation = Word(self.dictionary[word_normalised])
-        except KeyError as Error:
-            raise KeyError(word)
+        if word_normalised not in self.dictionary:
+            raise KeyError(word_normalised)
 
-        return word_translation
+        word_translations = self.dictionary[word_normalised]
 
+        for word_translation in word_translations:
+            try:
+                translations.append(Word(word_translation))
+            except Exception as e:
+                continue
 
-# translator = Translator()
-#
-# pprint(translator.translate("hund"))
+        return translations
