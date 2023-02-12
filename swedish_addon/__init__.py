@@ -109,6 +109,8 @@ def print_all_notes(ed):
         if not words:
             return
 
+        word = words[0]
+
         note: Note = ed.note
         note_editor = NoteEditor(note)
         # Add translation
