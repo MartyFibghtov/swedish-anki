@@ -2,6 +2,7 @@
 import os
 import pathlib
 import pprint
+from typing import List
 from urllib import parse
 import webbrowser
 from datetime import datetime
@@ -104,8 +105,12 @@ def print_all_notes(ed):
     # showInfo(str())
     try:
         search = WordProcessor.normalize_word(ed.note.fields[0])
-        word: Word = translator.translate(ed.note.fields[0])
-        # showInfo(str(word.__dict__))
+        words: List[Word] = translator.translate(ed.note.fields[0])
+        if not words:
+            return
+
+        word = words[0]
+
         note: Note = ed.note
         note_editor = NoteEditor(note)
         # Add translation
