@@ -5,19 +5,7 @@ from typing import List, Dict
 import xml.etree.ElementTree as ET
 
 from .utilities import xmltodict
-
-from .utilities.WordProcessors import WordProcessor
-
-# import os
-# from dataclasses import dataclass
-# from pprint import pprint
-# from typing import List, Dict
-# import xml.etree.ElementTree as ET
-#
-# from utilities import xmltodict
-#
-# from utilities.WordProcessors import WordProcessor
-
+from .utilities.word_processors import normalize_word
 
 
 class DictionaryXmlReader:
@@ -100,7 +88,7 @@ class Translator:
 
     def translate(self, word: str) -> List[Word]:
         translations = []
-        word_normalised = WordProcessor.normalize_word(word)
+        word_normalised = normalize_word(word)
         if word_normalised not in self.dictionary:
             raise KeyError(word_normalised)
 
