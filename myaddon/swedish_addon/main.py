@@ -7,11 +7,11 @@ from typing import List
 from anki.hooks import addHook
 from aqt.utils import tooltip
 
-from swedish_addon.AnkiWrappers.anki_file_system import get_content_folder_path
-from swedish_addon.AnkiWrappers.note_editor import NoteEditor
-from swedish_addon.translator import Translator, Word
-from swedish_addon.utilities.loader import download_url_to_file
-from swedish_addon.utilities.word_processors import normalize_word
+from .AnkiWrappers.anki_file_system import get_content_folder_path
+from .AnkiWrappers.note_editor import NoteEditor
+from .translator import Translator, Word
+from .utilities.loader import download_url_to_file
+from .utilities.word_processors import normalize_word
 
 
 def open_url(url, search) -> None:
