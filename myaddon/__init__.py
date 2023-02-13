@@ -1,0 +1,1 @@
+from .swedish_addon import main

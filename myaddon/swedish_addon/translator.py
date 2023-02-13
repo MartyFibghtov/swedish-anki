@@ -2,8 +2,8 @@ import os
 from dataclasses import dataclass
 from typing import List, Dict
 
-from swedish_addon.utilities import xmltodict
-from swedish_addon.utilities.word_processors import normalize_word
+from .utilities import xmltodict
+from .utilities.word_processors import normalize_word
 
 
 class DictionaryXmlReader:
