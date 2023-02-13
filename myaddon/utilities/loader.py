@@ -31,7 +31,7 @@ def download_url_to_file(
     if add_time_prefix:
         file_name = str(datetime.now()) + file_name
 
-    file_path = '{0}{1}'.format(where_to_save, file_name)
+    file_path = '{0}/{1}'.format(where_to_save, file_name)
 
     response = requests.get(url=url)
 
