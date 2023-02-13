@@ -5,10 +5,11 @@ import webbrowser
 from typing import List
 
 from anki.hooks import addHook
+from aqt.utils import tooltip
 
 from swedish_addon.AnkiWrappers.anki_file_system import get_content_folder_path
 from swedish_addon.AnkiWrappers.note_editor import NoteEditor
-from swedish_addon.Translator import Translator, Word
+from swedish_addon.translator import Translator, Word
 from swedish_addon.utilities.loader import download_url_to_file
 from swedish_addon.utilities.word_processors import normalize_word
 
@@ -48,8 +49,10 @@ def fill_anki_card(ed: NoteEditor):
         ed: Editor class, automatically passes by Anki
     """
     search = normalize_word(ed.note.fields[0])
-    words: List[Word] = translator.translate(ed.note.fields[0])
-    if not words:
+    try:
+        words: List[Word] = translator.translate(ed.note.fields[0])
+    except KeyError:
+        tooltip("Not found {0}".format(search))
         return
 
     word = words[0]
@@ -66,20 +69,19 @@ def fill_anki_card(ed: NoteEditor):
     # Add audio
     add_audio_to_card(word, note_editor)
 
-    # Add Example
-    if word.examples:
-        # TODO Search examples in Reverso context
-        note_editor.insert_text_in_field(
-            text_to_write=', '.join(word.examples),
-            field=4,
-        )
+    # # Add Example
+    # if word.examples:
+    #     note_editor.insert_text_in_field(
+    #         text_to_write=', '.join(word.examples),
+    #         field=4,
+    #     )
 
-    # Add definition
-    if word.definition:
-        note_editor.insert_text_in_field(
-            text_to_write=', '.join(word.definition),
-            field=5,
-        )
+    # # Add definition
+    # if word.definition:
+    #     note_editor.insert_text_in_field(
+    #         text_to_write=', '.join(word.definition),
+    #         field=5,
+    #     )
 
     # Add part of speech
     if word.part_of_speech:
@@ -89,10 +91,11 @@ def fill_anki_card(ed: NoteEditor):
         )
 
     # Open url in SAOL
+    open_url('https://context.reverso.net/translation/swedish-english/{0}', search)
     open_url('https://svenska.se/saol/?sok={0}', search)
     open_url(
         'https://www.google.com/search?q={0}&tbm=isch&safe=off&tbs&hl=en&sa=X',
-        search,
+        "{0} illustration".format(search),
     )
 
     ed.loadNote()

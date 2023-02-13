@@ -1,17 +1,16 @@
 import os
 from dataclasses import dataclass
-from pprint import pprint
 from typing import List, Dict
-import xml.etree.ElementTree as ET
 
-from .utilities import xmltodict
-from .utilities.word_processors import normalize_word
+from swedish_addon.utilities import xmltodict
+from swedish_addon.utilities.word_processors import normalize_word
 
 
 class DictionaryXmlReader:
 
     def __init__(self, dict_path):
         self.dict_path = dict_path
+
     def xml_to_dict(self):
         with open(self.dict_path, 'r', encoding='utf-8') as file:
             my_xml = file.read()
@@ -74,7 +73,7 @@ class Word:
                 examples = [ex['ex_orig'] for ex in examples if ex]
 
             self.examples = examples
-        except Exception as e:
+        except Exception as err:
             pass
 
 
@@ -97,7 +96,7 @@ class Translator:
         for word_translation in word_translations:
             try:
                 translations.append(Word(word_translation))
-            except Exception as e:
+            except Exception as err:
                 continue
 
         return translations
