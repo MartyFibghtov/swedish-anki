@@ -1,1 +1,1 @@
-from .swedish_addon import main
+from . import main

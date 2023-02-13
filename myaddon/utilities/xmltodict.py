@@ -481,7 +481,7 @@ def unparse(input_dict, output=None, encoding='utf-8', full_document=True,
     The resulting XML document is returned as a string, but if `output` (a
     file-like object) is specified, it is written there instead.
 
-    Dictionary keys prefixed with `attr_prefix` (default=`'@'`) are interpreted
+    dictionary keys prefixed with `attr_prefix` (default=`'@'`) are interpreted
     as XML node attributes, whereas keys equal to `cdata_key`
     (default=`'#text'`) are treated as character data.
 

@@ -2,8 +2,10 @@ import os
 from dataclasses import dataclass
 from typing import List, Dict
 
-from .utilities import xmltodict
+
 from .utilities.word_processors import normalize_word
+
+from .utilities import xmltodict
 
 
 class DictionaryXmlReader:
