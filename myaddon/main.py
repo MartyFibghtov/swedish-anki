@@ -12,7 +12,9 @@ from .AnkiWrappers.note_editor import NoteEditor
 from .translator import Translator, Word
 from .utilities.loader import download_url_to_file
 from .utilities.word_processors import normalize_word
+from .utilities.reverso_context_api.client import Client
 
+import itertools
 
 def open_url(url, search) -> None:
     """Open passed url in browser.
@@ -49,54 +51,56 @@ def fill_anki_card(ed: NoteEditor):
         ed: Editor class, automatically passes by Anki
     """
     search = normalize_word(ed.note.fields[0])
-    try:
-        words: List[Word] = translator.translate(ed.note.fields[0])
-    except KeyError:
-        tooltip("Not found {0}".format(search))
-        return
 
-    word = words[0]
+    # Search in context Reverso
+
+    client = Client("sv", "en")
+
 
     # Init Note
     note_editor = NoteEditor(ed.note)
 
+
     # Add translation
     note_editor.insert_text_in_field(
-        text_to_write=', '.join(word.translation),
+        text_to_write=', '.join(list(client.get_translations(search))),
         field=1,
     )
 
     # Add audio
-    add_audio_to_card(word, note_editor)
+    try:
+        words: List[Word] = translator.translate(ed.note.fields[0])
+        for word in words:
+            add_audio_to_card(word, note_editor)
+    except KeyError:
+        tooltip("Not found {0}".format(search))
 
-    # # Add Example
-    # if word.examples:
-    #     note_editor.insert_text_in_field(
-    #         text_to_write=', '.join(word.examples),
-    #         field=4,
-    #     )
-
-    # # Add definition
-    # if word.definition:
-    #     note_editor.insert_text_in_field(
-    #         text_to_write=', '.join(word.definition),
-    #         field=5,
-    #     )
-
-    # Add part of speech
-    if word.part_of_speech:
+    # Add Example
+    examples = list(itertools.islice(client.get_translation_samples(search, cleanup=False), 5))
+    tooltip(str(examples))
+    for example in examples:
+        # Insert swedish example
         note_editor.insert_text_in_field(
-            text_to_write=word.part_of_speech,
-            field=6,
+            text_to_write='{0}<br>'.format(example[0]),
+            field=4,
+            overwrite=False
         )
+
+        # Insert english example
+        note_editor.insert_text_in_field(
+            text_to_write='{0}<br>'.format(example[1]),
+            field=5,
+            overwrite=False
+        )
+
 
     # Open url in SAOL
     open_url('https://context.reverso.net/translation/swedish-english/{0}', search)
     open_url('https://svenska.se/saol/?sok={0}', search)
-    open_url(
-        'https://www.google.com/search?q={0}&tbm=isch&safe=off&tbs&hl=en&sa=X',
-        "{0} illustration".format(search),
-    )
+    # open_url(
+    #     'https://www.google.com/search?q={0}&tbm=isch&safe=off&tbs&hl=en&sa=X',
+    #     "{0} illustration".format(search),
+    # )
 
     ed.loadNote()
 
