@@ -76,8 +76,8 @@ def fill_anki_card(ed: NoteEditor):
         tooltip("Not found {0}".format(search))
 
     # Add Example
-    examples = list(itertools.islice(client.get_translation_samples(search, cleanup=False), 5))
-    tooltip(str(examples))
+    examples = list(itertools.islice(client.get_translation_samples(search, cleanup=False), 2))
+
     for example in examples:
         # Insert swedish example
         note_editor.insert_text_in_field(
